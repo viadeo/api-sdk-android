@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Viadeo SDK Sample</string>
+    <string name="post_status">Post your status</string>
+    <string name="post">Post</string>
+    <string name="post_status_success">Your status has been updated</string>
+</resources>
