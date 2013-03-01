@@ -48,7 +48,8 @@ public class ViadeoLoginPopup extends Dialog {
 			
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 				
-				Log.d(ViadeoConstants.LOG_TAG, "onReceivedError errorCode = " + errorCode + " description = " + description + " failingUrl = " + failingUrl);
+				if(Viadeo.LOG)
+					Log.d(ViadeoConstants.LOG_TAG, "onReceivedError errorCode = " + errorCode + " description = " + description + " failingUrl = " + failingUrl);
 
 				if(errorCode != -2 && (!failingUrl.startsWith(ViadeoConstants.REDIRECT_URI) || !failingUrl.startsWith(ViadeoConstants.CANCEL_URI))) {
 					_viadeo.error(errorCode, description, failingUrl);

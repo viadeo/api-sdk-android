@@ -41,7 +41,8 @@ public class ViadeoRequester extends AsyncTask<ViadeoRequest, ViadeoProgressBean
 
 	protected void onProgressUpdate(ViadeoProgressBean... progressBean) {
 
-		Log.d(ViadeoConstants.LOG_TAG, "[RESPONSE] " + progressBean[0].getResponse());
+		if(Viadeo.LOG)
+			Log.d(ViadeoConstants.LOG_TAG, "[RESPONSE] " + progressBean[0].getResponse());
 
 		try {
 

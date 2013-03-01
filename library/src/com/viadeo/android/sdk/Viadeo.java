@@ -23,6 +23,7 @@ import com.viadeo.android.sdk.ViadeoAPIManager.Method;
 public class Viadeo {
 
 	private static final String ACCESS_TOKEN = "access_token";
+	public static boolean LOG = true; 
 	
 	private String _clientId;
 	private String _clientSecret;

@@ -142,28 +142,32 @@ public class ViadeoAPIManager {
 
 		/////////////////////////////// LOG
 
-		Log.d(ViadeoConstants.LOG_TAG, "[" + httpUriRequest.getMethod() + "] " + httpUriRequest.getURI());
-		
-		for(int i=0; i<httpUriRequest.getAllHeaders().length; i++) {
-			Log.d(ViadeoConstants.LOG_TAG, "[HEADER] " + httpUriRequest.getAllHeaders()[i].getName() + " : " + httpUriRequest.getAllHeaders()[i].getValue());
-		}
-
-		try {
+		if(Viadeo.LOG) {
 			
-			if(method == Method.POST || method == Method.PUT || method == Method.DELETE) {
-
-				HttpEntity bodyEntity = ((HttpEntityEnclosingRequestBase)httpUriRequest).getEntity();
-				if(bodyEntity != null) {
-					InputStream bodyStream = bodyEntity.getContent();
-					String body = convertStreamToString(bodyStream);
-					Log.d(ViadeoConstants.LOG_TAG, "[BODY] " + body);
-				}
-
+			Log.d(ViadeoConstants.LOG_TAG, "[" + httpUriRequest.getMethod() + "] " + httpUriRequest.getURI());
+			
+			for(int i=0; i<httpUriRequest.getAllHeaders().length; i++) {
+				Log.d(ViadeoConstants.LOG_TAG, "[HEADER] " + httpUriRequest.getAllHeaders()[i].getName() + " : " + httpUriRequest.getAllHeaders()[i].getValue());
 			}
-			
-		} catch (IllegalStateException e) {
-		} catch (IOException e) {
+
+			try {
+				
+				if(method == Method.POST || method == Method.PUT || method == Method.DELETE) {
+
+					HttpEntity bodyEntity = ((HttpEntityEnclosingRequestBase)httpUriRequest).getEntity();
+					if(bodyEntity != null) {
+						InputStream bodyStream = bodyEntity.getContent();
+						String body = convertStreamToString(bodyStream);
+						Log.d(ViadeoConstants.LOG_TAG, "[BODY] " + body);
+					}
+
+				}
+				
+			} catch (IllegalStateException e) {
+			} catch (IOException e) {
+			}
 		}
+
 
 		/////////////////////////////// LOG
 		

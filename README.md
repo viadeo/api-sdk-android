@@ -134,6 +134,14 @@ You can also instantiate the **ViadeoConnectButton** directly in your xml layout
     android:layout_height="wrap_content" />
 ```
 
+## Logs
+
+If you want to unactivate logs for production, just set :
+
+```java
+Viadeo.LOG = false;
+```
+
 ## ViadeoRequest  examples
 
 Here it is some **ViadeoRequest** examples to show the different HTTP methods with parameters.
