@@ -3,11 +3,11 @@ package com.viadeo.android.sdk;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.viadeo.android.sdk.ViadeoAPIManager.Method;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.viadeo.android.sdk.ViadeoAPIManager.Method;
 
 /**
  * Object that execute a ViadeoRequest to the Viadeo graph API easily.This class
@@ -17,57 +17,55 @@ import android.util.Log;
  * @see ViadeoRequest
  * @see ViadeoRequestListener
  */
-public class ViadeoRequester extends AsyncTask<ViadeoRequest, String, Void> {
-	
-	private ViadeoRequestListener _listener;
-	private int _requestCode;
-	private Viadeo _viadeo;
-	
-	protected Void doInBackground(ViadeoRequest... requests) {
-		
-		for(int i=0; i<requests.length; i++) {
+public class ViadeoRequester extends AsyncTask<ViadeoRequest, ViadeoProgressBean, Void> {
 
-			_requestCode = requests[i].getRequestCode();
-			_viadeo = requests[i].getViadeo();
-			_listener = requests[i].getListener();
-			
+	protected Void doInBackground(ViadeoRequest... requests) {
+
+		for (int i = 0; i < requests.length; i++) {
+
 			String graphPath = requests[i].getGraphPath();
 			Bundle params = requests[i].getParams();
 			Method method = requests[i].getMethod();
 
-			publishProgress(_viadeo.request(graphPath, method, params));
+			ViadeoProgressBean progressBean = new ViadeoProgressBean();
+			progressBean.setResponse(requests[i].getViadeo().request(graphPath, method, params));
+			progressBean.setListener(requests[i].getListener());
+			progressBean.setRequestCode(requests[i].getRequestCode());
+			progressBean.setViadeo(requests[i].getViadeo());
+
+			publishProgress(progressBean);
 		}
 
 		return null;
 	}
 
+	protected void onProgressUpdate(ViadeoProgressBean... progressBean) {
 
-    protected void onProgressUpdate(String... response) {
-
-		Log.d(ViadeoConstants.LOG_TAG, "[RESPONSE] " + response[0]);
+		Log.d(ViadeoConstants.LOG_TAG, "[RESPONSE] " + progressBean[0].getResponse());
 
 		try {
-			
-			JSONObject responseObject = new JSONObject(response[0]);
+
+			JSONObject responseObject = new JSONObject(progressBean[0].getResponse());
 
 			if (!responseObject.isNull("error")) {
-				
-				if(responseObject.getJSONObject("error").getString("type").equals("Token revoked")) {
-					_viadeo.logOut();					
+
+				if (responseObject.getJSONObject("error").getString("type").equals("Token revoked")) {
+					progressBean[0].getViadeo().logOut();
 				}
 
-				_listener.onViadeoRequestError(_requestCode, responseObject.getJSONObject("error").getString("message"));
+				progressBean[0].getListener().onViadeoRequestError(progressBean[0].getRequestCode(), responseObject.getJSONObject("error").getString("message"));
 
 			} else {
-				
-				_listener.onViadeoRequestComplete(_requestCode, response[0]);
+
+				progressBean[0].getListener().onViadeoRequestComplete(progressBean[0].getRequestCode(), progressBean[0].getResponse());
 			}
 
 		} catch (JSONException e) {
 			Log.e(ViadeoConstants.LOG_TAG, "JSONException", e);
 		}
-    }
-    
+	}
+
 	protected void onPostExecute(Void response) {
 	}
+
 }
